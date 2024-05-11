@@ -2,6 +2,7 @@ import { useState } from "react";
 import Header from "./components/Header";
 import FlightSearchForm from "./components/SearchForm";
 import { data } from "./data/data";
+import FlightDataShow from "./components/FlightDataShow";
 
 function App() {
   // to set exact data
@@ -13,8 +14,6 @@ function App() {
   const handleSearch = (result) => {
     setSearchResult(result);
   };
-
-  console.log(searchResult);
 
   return (
     <div>
@@ -41,6 +40,34 @@ function App() {
           flightRoutes={flightRoutesData}
           onSearch={handleSearch}
         ></FlightSearchForm>
+        {/* search result  */}
+        <div className="mt-10">
+          {searchResult.length > 0 ? (
+            <table className="table-auto w-full">
+              <thead>
+                <tr className="bg-gray-400">
+                  <th className="">Flight</th>
+                  <th className="">AIRCRAFT</th>
+                  <th className="">CLASS</th>
+                  <th className="">FARE</th>
+                  <th className="">ROUTE</th>
+
+                  <th className="">DEPARTURE</th>
+                  <th className="">ARRIVAL</th>
+                  <th className="">DURATION</th>
+                  <th className="">PRICE</th>
+                </tr>
+              </thead>
+              <tbody>
+                {searchResult.map((data, i) => (
+                  <FlightDataShow data={data} key={i}></FlightDataShow>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <div className="text-3xl mt-4 text-center">Data Not Found</div>
+          )}
+        </div>
       </div>
     </div>
   );

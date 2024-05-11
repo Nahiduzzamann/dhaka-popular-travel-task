@@ -6,8 +6,9 @@ const FlightSearchForm = ({ flightRoutes, onSearch }) => {
   const [toLocation, setToLocation] = useState("");
   const [journeyDate, setJourneyDate] = useState("");
   const [errors, setErrors] = useState({});
-  const validateForm = () => {
+  // console.log(flightRoutes[0]);
 
+  const validateForm = () => {
     const errors = {};
     if (!passengerCount) {
       errors.passengerCount = "Passenger count is required";
@@ -29,9 +30,12 @@ const FlightSearchForm = ({ flightRoutes, onSearch }) => {
 
   const handleSearch = (e) => {
     e.preventDefault();
+
     if (validateForm()) {
       // Perform search based on input values
       const searchResult = flightRoutes.filter((route) => {
+        // const d = route.itineraries[0].segments[0].departure.at
+        // console.log(d.split('T'));
         // Check if the flight has available seats for the given passenger
         const availableSeats = parseInt(route.seat[0]);
         if (availableSeats < passengerCount) return false;
@@ -50,12 +54,14 @@ const FlightSearchForm = ({ flightRoutes, onSearch }) => {
           return false;
 
         // Check if the journey date matches
-        const departureDateTime = new Date(
-          route.itineraries[0].segments[0].departure.at
-        );
-        const journeyDateTime = new Date(journeyDate);
-        if (departureDateTime.toDateString() !== journeyDateTime.toDateString())
-          return false;
+        const departureDateTime =
+          route.itineraries[0].segments[0].departure.at.split("T")[0];
+
+        const journeyDateString = journeyDate.toString();
+
+        // console.log(departureDateTime== journeyDateString);
+
+        if (departureDateTime != journeyDateString) return false;
         return true; // If all criteria match, include the flight in the results
       });
       onSearch(searchResult);
@@ -131,9 +137,7 @@ const FlightSearchForm = ({ flightRoutes, onSearch }) => {
               type="date"
               placeholder="Journey Date"
               value={journeyDate}
-              onChange={(e) =>
-                setJourneyDate(e.target.value)
-              }
+              onChange={(e) => setJourneyDate(e.target.value)}
               required
             />
             {errors.journeyDate && (
