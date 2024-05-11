@@ -14,7 +14,7 @@ function App() {
   const handleSearch = (result) => {
     setSearchResult(result);
   };
-
+console.log(data.flightOffer);
   return (
     <div>
       <Header></Header>
